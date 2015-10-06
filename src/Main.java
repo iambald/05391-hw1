@@ -10,6 +10,7 @@ import java.awt.Robot;
 
 
 import java.awt.AWTException;
+import java.awt.Point;
 
 
 
@@ -17,7 +18,7 @@ public class Main extends PApplet
 {
 	// you shouldn't need to edit any of these variables
 	int margin = 300; // margin from sides of window
-	final int padding = 0; // padding between buttons and also their width/height
+	final int padding = 10; // padding between buttons and also their width/height
 	final int size = 60; // total size of button including padding on both sides
 	ArrayList<Integer> trials = new ArrayList<Integer>(); //contains the order of buttons that activate in the test
 	int trialNum = 0; //the current trial number (indexes into trials array above)
@@ -68,7 +69,7 @@ public class Main extends PApplet
 		if ((userX > bounds.x && userX < bounds.x + bounds.width) && (userY > bounds.y && userY < bounds.y + bounds.height)) // test to see if hit was within bounds
 		{
 			if (!player.isPlaying() || player.position() > 1000)
-				player.play(0);
+				player.play(500);
 		}
 		
 		noStroke();
@@ -76,7 +77,7 @@ public class Main extends PApplet
 		// you shouldn't need to edit anything above this line! You can edit below this line as you see fit
 		
 		fill(255, 0, 0); // set fill color to red
-		ellipse(userX, userY, 20, 20); //draw user cursor as a circle with a diameter of 20
+		ellipse(userX, userY, 15, 15); //draw user cursor as a circle with a diameter of 20
 
 	}
 	
@@ -84,6 +85,23 @@ public class Main extends PApplet
 		if (key == ' ') {
 			mousePressed();
 		}
+	}
+	
+	public boolean mouseCollides(double cursorRadius, Rectangle bounds) {		
+	    double circleDistanceX = abs(userX - bounds.x);
+	    double circleDistanceY = abs(userY - bounds.y);
+
+	    if (circleDistanceX > (bounds.width/2 + cursorRadius)) { return false; }
+	    if (circleDistanceY > (bounds.height/2 + cursorRadius)) { return false; }
+
+	    if (circleDistanceX <= (bounds.width/2)) { return true; } 
+	    if (circleDistanceY <= (bounds.height/2)) { return true; }
+
+	    double cornerDistance_sq = Math.pow(circleDistanceX - bounds.width/2, 2) +
+	                         Math.pow(circleDistanceY - bounds.height/2, 2);
+
+//	    return false;
+	    return (cornerDistance_sq <= cursorRadius * cursorRadius);
 	}
 
 	public void mousePressed() // test to see if hit was in target!
@@ -109,7 +127,8 @@ public class Main extends PApplet
 
 		// YOU CAN EDIT BELOW HERE IF YOUR METHOD REQUIRES IT (shouldn't need to edit above this line)
 
-		if ((userX > bounds.x && userX < bounds.x + bounds.width) && (userY > bounds.y && userY < bounds.y + bounds.height)) // test to see if hit was within bounds
+		if ((userX > bounds.x - padding && userX < bounds.x + bounds.width + padding) && (userY > bounds.y - padding && userY < bounds.y + bounds.height + padding)) // test to see if hit was within bounds
+//		if (mouseCollides(7.5, bounds))
 		{
 			System.out.println("HIT! " + trialNum + " " + (millis() - startTime)); // success
 			hits++;
@@ -127,7 +146,6 @@ public class Main extends PApplet
 		 
 		trialNum++; // Increment trial number
 	}
-
 	
 	public void updateUserMouse() // YOU CAN EDIT THIS
 	{
@@ -141,8 +159,6 @@ public class Main extends PApplet
 		if (newY > margin && newY < margin + 4*size) {
 			userY = newY;
 		}
-//		userX += mouseX - pmouseX; //add to userX the difference between the current mouseX and the previous mouseX
-//		userY += mouseY - pmouseY; //add to userY the difference between the current mouseY and the previous mouseY
 	}
 
 	
@@ -194,6 +210,14 @@ public class Main extends PApplet
 	{
 		double x = (i % 4) * (size) + margin;
 		double y = (i / 4) * (size) + margin;
+		
+		Rectangle bounds = new Rectangle((int)x - padding, (int)y - padding, size, size);
+		
+		if ((userX > bounds.x && userX < bounds.x + bounds.width) && (userY > bounds.y && userY < bounds.y + bounds.height)) // test to see if hit was within bounds
+//		if (mouseCollides(7.5, bounds))
+		{
+//			return bounds;
+		}
 
 		return new Rectangle((int)x, (int)y, size - padding*2, size - padding*2);
 	}
@@ -204,7 +228,10 @@ public class Main extends PApplet
 
 		stroke(100);
 		if (trials.get(trialNum) == i) {
-			if ((userX > bounds.x && userX < bounds.x + bounds.width) && (userY > bounds.y && userY < bounds.y + bounds.height)) // test to see if hit was within bounds
+//			if ((userX > bounds.x && userX < bounds.x + bounds.width) && (userY > bounds.y && userY < bounds.y + bounds.height)) // test to see if hit was within bounds
+//			if (mouseCollides(7.5, bounds))
+			if ((userX > bounds.x - padding && userX < bounds.x + bounds.width + padding) && (userY > bounds.y - padding && userY < bounds.y + bounds.height + padding)) // test to see if hit was within bounds
+
 			{
 				fill(0, 255, 0);				
 			}
