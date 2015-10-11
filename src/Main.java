@@ -30,7 +30,7 @@ public class Main extends PApplet
 	int misses = 0; //number of missed clicks
 
 	// You can edit variables below here and also add new ones as you see fit
-	int numRepeats = 3; //sets the number of times each button repeats in the test (you can edit this)
+	int numRepeats = 7; //sets the number of times each button repeats in the test (you can edit this)
 
 	Minim minim;
 	AudioPlayer player;
@@ -152,11 +152,11 @@ public class Main extends PApplet
 		// you can do whatever you want to userX and userY (you shouldn't touch mouseX and mouseY)
 		int newX = userX + mouseX - pmouseX, newY = userY + mouseY - pmouseY;
 		
-		if (newX > margin && newX < margin + 4*size) {
+		if (newX > margin && newX < margin + 4*size - 2*padding) {
 			userX = newX;
 		}
 		
-		if (newY > margin && newY < margin + 4*size) {
+		if (newY > margin && newY < margin + 4*size - 2*padding) {
 			userY = newY;
 		}
 	}
@@ -226,7 +226,7 @@ public class Main extends PApplet
 	{
 		Rectangle bounds = getButtonLocation(i);
 
-		stroke(100);
+		noStroke();
 		if (trials.get(trialNum) == i) {
 //			if ((userX > bounds.x && userX < bounds.x + bounds.width) && (userY > bounds.y && userY < bounds.y + bounds.height)) // test to see if hit was within bounds
 //			if (mouseCollides(7.5, bounds))
@@ -239,8 +239,11 @@ public class Main extends PApplet
 				fill(255, 255, 0); // if so, fill yellow
 			}	
 		}
+		else if (trialNum < trials.size() - 1 && trials.get(trialNum+1) == i) {
+			fill(127);
+		}
 		else
-			fill(200); // if not, fill gray
+			fill(40); // if not, fill gray
 
 		rect(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
