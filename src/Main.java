@@ -15,6 +15,16 @@ import java.awt.AWTException;
 
 public class Main extends PApplet
 {
+	//THE TEAM MEMBERS PARTICIPANT NUMBER
+	final int participant = 1;
+	int trialNumber = 0;
+	int begUseX = 0;
+	int begUseY = 0;
+	int boundsX;
+	int boundsY;
+	int boundsWidth;
+	int previousTime;
+	
 	// you shouldn't need to edit any of these variables
 	int margin = 300; // margin from sides of window
 	final int padding = 0; // padding between buttons and also their width/height
@@ -88,8 +98,10 @@ public class Main extends PApplet
 
 	public void mousePressed() // test to see if hit was in target!
 	{
-		if (trialNum >= trials.size())
-			return;
+				
+		if (trialNum >= trials.size()){
+			return;	
+		}
 
 		if (trialNum == 0) //check if first click
 			startTime = millis();
@@ -111,12 +123,62 @@ public class Main extends PApplet
 
 		if ((userX > bounds.x && userX < bounds.x + bounds.width) && (userY > bounds.y && userY < bounds.y + bounds.height)) // test to see if hit was within bounds
 		{
-			System.out.println("HIT! " + trialNum + " " + (millis() - startTime)); // success
+//			System.out.println("HIT! " + trialNum + " " + (millis() - startTime)); // success
 			hits++;
+			boundsX = bounds.x;
+			boundsY = bounds.y;
+			boundsWidth = bounds.width;
+			trialNumber++;
+			System.out.print(participant);
+			System.out.print(", ");
+			System.out.print(trialNumber);
+			System.out.print(", ");
+			System.out.print(begUseX);
+			System.out.print(", ");
+			System.out.print(begUseY);
+			System.out.print(", ");
+			System.out.print(boundsX);
+			System.out.print(", ");
+			System.out.print(boundsY);
+			System.out.print(", ");
+			System.out.print(boundsWidth);
+			System.out.print(", ");
+			System.out.print(millis() - previousTime );
+			System.out.print(", ");
+			System.out.print("1");
+			System.out.println("");
+			previousTime = millis();
+			begUseX = userX;
+			begUseY = userY;
 		} else
 		{
-			System.out.println("MISSED! " + trialNum + " " + (millis() - startTime)); // fail
+//			System.out.println("MISSED! " + trialNum + " " + (millis() - startTime)); // fail
 			misses++;
+			boundsX = bounds.x;
+			boundsY = bounds.y;
+			boundsWidth = bounds.width;
+			trialNumber++;
+			System.out.print(participant);
+			System.out.print(", ");
+			System.out.print(trialNumber);
+			System.out.print(", ");
+			System.out.print(begUseX);
+			System.out.print(", ");
+			System.out.print(begUseY);
+			System.out.print(", ");
+			System.out.print(boundsX);
+			System.out.print(", ");
+			System.out.print(boundsY);
+			System.out.print(", ");
+			System.out.print(boundsWidth);
+			System.out.print(", ");
+			System.out.print(millis() - previousTime );
+			System.out.print(", ");
+			System.out.print("0");
+			System.out.println("");
+			previousTime = millis();
+			begUseX = userX;
+			begUseY = userY;
 		}
 		
 		player.pause();
@@ -159,6 +221,9 @@ public class Main extends PApplet
 
 	public void setup()
 	{
+		previousTime = millis();
+		begUseX = userX;
+		begUseY = userY;
 		size(900,900); // set the size of the window
 		noCursor(); // hides the system cursor (can turn on for debug, but should be off otherwise!)
 		noStroke(); //turn off all strokes, we're just using fills here (can change this if you want)
@@ -177,7 +242,7 @@ public class Main extends PApplet
 		System.out.println("trial order: " + trials);
 		
 		minim = new Minim(this);
-		player = minim.loadFile("/Users/Jeff/Downloads/PointingBakeOffCode/Eclipse Project/PointingBakeOff/sound.mp3");
+		player = minim.loadFile("/Users/justinhilliard/Documents/workspace/05391-hw1/sound.mp3");
 		input = minim.getLineIn();
 		
 		userX = width / 2;
